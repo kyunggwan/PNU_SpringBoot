@@ -1,13 +1,13 @@
-package edu.pnu;
+package com.rubypaper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Mission5Application {
+public class Chapter012Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Mission5Application.class, args);
+		SpringApplication.run(Chapter012Application.class, args);
 	}
 
 }

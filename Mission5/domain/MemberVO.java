@@ -1,37 +1,30 @@
-package edu.pnu.domain;
+package com.rubypaper.domain;
 
 import java.util.Date;
 
 public class MemberVO {
-    private int id;
-    private String pass;
-    private String name;
-    private Date regidate;
 
-    public MemberVO() {
-	}
+	private String id;
+	private String name;
+	private String pass;
+	private Date regidate = new Date();
 
-	public MemberVO(int id, String pass, String name, Date regidate) {
+	public MemberVO() {
+	}	
+	
+	public MemberVO(String id, String name, String pass, Date regidate) {
 		this.id = id;
-		this.pass = pass;
 		this.name = name;
+		this.pass = pass;
 		this.regidate = regidate;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getPass() {
-		return pass;
-	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
 	}
 
 	public String getName() {
@@ -42,6 +35,14 @@ public class MemberVO {
 		this.name = name;
 	}
 
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
 	public Date getRegidate() {
 		return regidate;
 	}
@@ -49,9 +50,4 @@ public class MemberVO {
 	public void setRegidate(Date regidate) {
 		this.regidate = regidate;
 	}
-
-	@Override
-	public String toString() {
-		return "MemberVO [id=" + id + ", pass=" + pass + ", name=" + name + ", regidate=" + regidate + "]";
-	}    
 }

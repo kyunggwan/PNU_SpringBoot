@@ -1,4 +1,4 @@
-package edu.pnu.dao.log;
+package com.rubypaper.log;
 
 public interface LogDao {
 

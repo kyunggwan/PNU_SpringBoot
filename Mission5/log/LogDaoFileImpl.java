@@ -1,11 +1,10 @@
-package edu.pnu.dao.log;
+package com.rubypaper.log;
 
 import java.io.File;
 import java.io.FileWriter;
-
 //@Repository
 public class LogDaoFileImpl implements LogDao {
-	
+
 	@Override
 	public void addLog(String method, String sqlstring, boolean success) {
 		try {
