@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+//@Repository
 public class MemberDaoListImpl implements MemberDAO {
 
+	private String sql;
 	private List<MemberVO> MemberList;
 
 	public MemberDaoListImpl() {
@@ -17,12 +19,13 @@ public class MemberDaoListImpl implements MemberDAO {
 
 	@Override
 	public List<MemberVO> getMembers() {
-		System.out.println("모든 멤버 출력");
+		sql = "from list getMembers()";
 		return MemberList;
 	}
 
 	@Override
 	public MemberVO getMember(String id) {
+		sql = "from list getMember()";
 		for (MemberVO m : MemberList) {
 			if (m.getId().equals(id)) {
 				System.out.println(m + "멤버 추가");
@@ -34,6 +37,7 @@ public class MemberDaoListImpl implements MemberDAO {
 
 	@Override
 	public MemberVO addMember(MemberVO membervo) {
+		sql = "from list addMember()";
 		MemberList.add(membervo);
 		System.out.println(membervo + "멤버 추가");
 		return membervo;
@@ -41,6 +45,7 @@ public class MemberDaoListImpl implements MemberDAO {
 
 	@Override
 	public MemberVO updateMembers(MemberVO membervo) {
+		sql = "from list updateMembers()";
 		for (MemberVO m : MemberList) {
 			if (m.getId().equals(membervo.getId())) {
 				m.setName(membervo.getName());
@@ -48,13 +53,13 @@ public class MemberDaoListImpl implements MemberDAO {
 				System.out.println(m + "멤버 업데이트");
 				return m;
 			}
-
 		}
 		return null;
 	}
 
 	@Override
 	public MemberVO removeMembers(String id) {
+		sql = "from list removeMembers()";
 		for (MemberVO m : MemberList) {
 			if (m.getId().equals(id)) {
 				MemberList.remove(m);
@@ -67,7 +72,6 @@ public class MemberDaoListImpl implements MemberDAO {
 
 	@Override
 	public String getSql() {
-		// TODO Auto-generated method stub
-		return null;
+		return sql;
 	}
 }

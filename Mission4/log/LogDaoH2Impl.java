@@ -24,7 +24,7 @@ public class LogDaoH2Impl implements LogDao {
 
 		PreparedStatement psmt = null;
 		try {
-			psmt = con.prepareStatement("insert into dblog (method,sqlstring,success) values (?,?,?)");
+			psmt = con.prepareStatement("insert into log (method,sqlstring,success) values (?,?,?)");
 			psmt.setString(1, method);
 			psmt.setString(2, sqlstring);
 			psmt.setBoolean(3, success);

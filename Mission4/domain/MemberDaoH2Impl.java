@@ -7,23 +7,28 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 
+	// sql문을 받기 위한 변수 설정, 일단 동시접속 고려 안함
+	private String sql;
+
+	// 명시한 데이터베이스로의 연결이 완료된 MemberDAO 객체를 생성합니다.
 	public MemberDaoH2Impl() {
 		super();
 	}
 
 	@Override
 	public List<MemberVO> getMembers() {
-
+		List<MemberVO> list = new ArrayList<>();
 		Statement st = null;
 		ResultSet rs = null;
 		try {
-			List<MemberVO> list = new ArrayList<>();
 			st = con.createStatement();
 			rs = st.executeQuery("select * from mvcmember");
+			sql = "select * from mvcmember";
 			while (rs.next()) {
 				MemberVO m = new MemberVO();
 				m.setId(rs.getString("id"));
@@ -31,7 +36,6 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 				m.setPass(rs.getString("pass"));
 				list.add(m);
 			}
-			return list;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -42,14 +46,14 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return list;
 	}
 
 	@Override
 	public MemberVO getMember(String id) {
 		MemberVO m = new MemberVO();
 		String query = "select * from mvcmember where id = ?";
-
+		sql = String.format("select * from mvcmember where id = '%s'", id);
 		try {
 			PreparedStatement psmt = con.prepareStatement(query);
 			psmt.setString(1, id);
@@ -75,6 +79,8 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 	public MemberVO addMember(MemberVO membervo) {
 
 		String query = "insert into MVCMEMBER(ID, PASS, NAME)" + "values(?,?,?)";
+		sql = String.format("insert into MVCMEMBER(ID, PASS, NAME)" + "values('%s','%s','%s')", membervo.getId(),
+				membervo.getPass(), membervo.getName());
 		try {
 			PreparedStatement psmt = con.prepareStatement(query);
 			psmt.setString(1, membervo.getId());
@@ -92,6 +98,8 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 	public MemberVO updateMembers(MemberVO m) {
 
 		String query = "update MVCMEMBER set PASS = ?, NAME = ? where id = ?";
+		sql = String.format("update MVCMEMBER set PASS = '%s', NAME = '%s' where id = '%s'", m.getPass(), m.getName(),
+				m.getId());
 		try {
 			PreparedStatement psmt = con.prepareStatement(query);
 			psmt.setString(1, m.getPass());
@@ -103,12 +111,14 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 			e.printStackTrace();
 		}
 		return m;
-
 	}
 
 	@Override
-	public MemberVO removeMembers(@PathVariable String id) {
-		String query = "delete from MVCMEMBER where ID = ?";
+	public MemberVO removeMembers(String id) {
+		MemberVO m = getMember(id);
+		String query = "DELETE FROM MVCMEMBER where ID = ?";
+		sql = String.format("DELETE FROM MVCMEMBER where ID = '%s'", id);
+
 		try {
 			PreparedStatement psmt = con.prepareStatement(query);
 			psmt.setString(1, id);
@@ -117,13 +127,12 @@ public class MemberDaoH2Impl extends JDBConnectH2 implements MemberDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return m;
 	}
 
 	@Override
 	public String getSql() {
-		// TODO Auto-generated method stub
-		return null;
+		return sql;
 	}
 
 }
