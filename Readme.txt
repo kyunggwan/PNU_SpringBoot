@@ -1,4 +1,4 @@
-Mission 1.
+# Mission 1.
 
 list 데이터를 생성해서 요청하는 정보를 제공하는 버전
 기본 구조는 Controller - Service로 구성되어 있다. - MemberController.java - MemberService.java
