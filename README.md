@@ -39,3 +39,8 @@ Mission4에서 어노테이션을 이용해서 의존성 주입이 되도록 수
 
 Mission5에서 jdbc Connection을 만들어서 사용하는 방식을
 JdbcTemplate를 이용하는 방식으로 변경한 버전
+
+
+## Practice
+
+Mission을 연습하는 WorkSpace
