@@ -10,39 +10,39 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.domain.MemberVO;
-import edu.pnu.service.Practice2Service;
+import edu.pnu.service.MemberService;
 
 @RestController
-public class Practice2Controller {
+public class MemberController {
 
-	private Practice2Service PracticeService;
+	private MemberService MemberService;
 
-	public Practice2Controller() {
-		PracticeService = new Practice2Service();
+	public MemberController() {
+		MemberService = new MemberService();
 	}
 
 	@GetMapping("/member")
 	public List<MemberVO> getMembers() {
-		return PracticeService.getMembers();
+		return MemberService.getMembers();
 	}
 
 	@GetMapping("/member/{id}")
 	public MemberVO getMember(@PathVariable String id) {
-		return PracticeService.getMember(id);
+		return MemberService.getMember(id);
 	}
 
 	@PostMapping("/member")
 	public MemberVO addMember(MemberVO mv) {
-		return PracticeService.addMember(mv);
+		return MemberService.addMember(mv);
 	}
 
 	@PutMapping("/member")
 	public MemberVO updateMember(MemberVO mv) {
-		return PracticeService.updateMember(mv);
+		return MemberService.updateMember(mv);
 	}
 
 	@DeleteMapping("/member/{id}")
-	public MemberVO deleteMember(@PathVariable String id) {
-		return PracticeService.deleteMember(id);
+	public boolean deleteMember(@PathVariable String id) {
+		return MemberService.deleteMember(id);
 	}
 }
