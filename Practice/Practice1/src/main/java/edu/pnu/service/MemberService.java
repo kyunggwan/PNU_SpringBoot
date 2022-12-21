@@ -6,11 +6,11 @@ import java.util.List;
 
 import edu.pnu.domain.MemberVO;
 
-public class Practice1Service {
+public class MemberService {
 
 	List<MemberVO> MemberList;
 
-	public Practice1Service() {
+	public MemberService() {
 		MemberList = new ArrayList<>();
 		for (int i = 1; i <= 3; i++) {
 			MemberList.add(new MemberVO("id" + i, "name" + i, "pass" + i, new Date()));
@@ -27,7 +27,6 @@ public class Practice1Service {
 			if (m.getId().equals(id)) {
 				return m;
 			}
-		System.out.println("서비스");
 		}
 		return null;
 	}
@@ -62,5 +61,4 @@ public class Practice1Service {
 		}
 		return null;
 	}
-
 }

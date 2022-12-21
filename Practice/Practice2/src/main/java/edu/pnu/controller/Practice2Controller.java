@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.pnu.domain.MemberVO;
-import edu.pnu.service.Practice1Service;
+import edu.pnu.service.Practice2Service;
 
 @RestController
-public class Practice1Controller {
+public class Practice2Controller {
 
-	private Practice1Service PracticeService;
+	private Practice2Service PracticeService;
 
-	public Practice1Controller() {
-		PracticeService = new Practice1Service();
+	public Practice2Controller() {
+		PracticeService = new Practice2Service();
 	}
 
 	@GetMapping("/member")
