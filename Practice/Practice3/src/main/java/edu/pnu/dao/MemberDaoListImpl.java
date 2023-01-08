@@ -1,4 +1,4 @@
-package edu.pnu.service;
+package edu.pnu.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,24 +6,27 @@ import java.util.List;
 
 import edu.pnu.domain.MemberVO;
 
-public class MemberService {
+public class MemberDaoListImpl implements MemberDao {
+	
+	//MemberVO형식의 데이터를 담을 list 생성
+	List<MemberVO> list;
 
-	List<MemberVO> MemberList;
-
-	public MemberService() {
-		MemberList = new ArrayList<>();
+	//list를 생성한다.
+	public MemberDaoListImpl() {
+		list = new ArrayList();
 		for (int i = 1; i <= 3; i++) {
-			MemberList.add(new MemberVO("id" + i, "name" + i, "pass" + i, new Date()));
+			list.add(new MemberVO("id" + i, "name" + i, "pass" + i, new Date()));
 		}
 	}
 
+	@Override
 	public List<MemberVO> getMembers() {
-		return MemberList;
+		return list;
 	}
 
+	@Override
 	public MemberVO getMember(String id) {
-
-		for (MemberVO m : MemberList) {
+		for (MemberVO m : list) {
 			if (m.getId().equals(id)) {
 				return m;
 			}
@@ -31,16 +34,16 @@ public class MemberService {
 		return null;
 	}
 
+	@Override
 	public MemberVO addMember(MemberVO mv) {
-		mv.setId(mv.getId() + (MemberList.size() + 1));
 		mv.setRegidate(new Date());
-		MemberList.add(mv);
+		list.add(mv);
 		return mv;
 	}
 
+	@Override
 	public MemberVO updateMember(MemberVO mv) {
-
-		for (MemberVO m : MemberList) {
+		for (MemberVO m : list) {
 			if (m.getId().equals(mv.getId())) {
 				m.setName(mv.getName());
 				m.setPass(mv.getPass());
@@ -51,14 +54,15 @@ public class MemberService {
 		return null;
 	}
 
-	public MemberVO deleteMember(String id) {
-
-		for (MemberVO m : MemberList) {
+	@Override
+	public boolean deleteMember(String id) {
+		for (MemberVO m : list) {
 			if (m.getId().equals(id)) {
-				MemberList.remove(m);
-				return m;
+				list.remove(m);
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
+
 }
