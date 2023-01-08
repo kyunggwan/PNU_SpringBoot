@@ -27,36 +27,7 @@ public class MemberDao {
 	}
 
 	public List<MemberVO> getMembers() {
-//
-//		Statement st = null;
-//		ResultSet rs = null;
-//
-//		List<MemberVO> list = new ArrayList<>();
-//		String query = "Select * from member";
-//
-//		try {
-//			st = con.createStatement();
-//			rs = st.executeQuery(query);
-//
-//			while (rs.next()) {
-//				MemberVO m = new MemberVO();
-//				m.setId(rs.getString("id"));
-//				m.setName(rs.getString("name"));
-//				m.setPass(rs.getString("pass"));
-//				m.setRegidate(rs.getDate("regidate"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				rs.close();
-//				st.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return list;
-//	}
+
 		Statement st = null;
 		ResultSet rs = null;
 		List<MemberVO> list = new ArrayList<>();
@@ -85,36 +56,7 @@ public class MemberDao {
 	}
 
 	public MemberVO getMember(String id) {
-//		PreparedStatement ps = null;
-//		ResultSet rs = null;
-//
-//		String query = "Select * from member where id = %d";
-//
-//		try {
-//			ps = con.prepareStatement(query);
-//			ps.setString(1, id);
-//			rs = ps.executeQuery();
-//			rs.next();
-//
-//			MemberVO m = new MemberVO();
-//			m.setId(rs.getString(id));
-//			m.setName(rs.getString("name"));
-//			m.setPass(rs.getString("pass"));
-//			m.setRegidate(rs.getDate("regidate"));
-//			return m;
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				rs.close();
-//				ps.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return null;
-//	}
+
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -123,7 +65,7 @@ public class MemberDao {
 			rs = st.executeQuery();
 			rs.next();
 			MemberVO m = new MemberVO();
-			m.setId(rs.getString(id));
+			m.setId(rs.getString("id"));
 			m.setPass(rs.getString("pass"));
 			m.setName(rs.getString("name"));
 			m.setRegidate(rs.getDate("regidate"));
@@ -143,23 +85,6 @@ public class MemberDao {
 
 	public MemberVO addMember(MemberVO mv) {
 
-//		PreparedStatement ps = null;
-//		String query = "insert into member values (id, name, pass) values (?,?,?)";
-//
-//		try {
-//			ps = con.prepareStatement(query);
-//			ps.setString(1, mv.getId());
-//			ps.setString(2, mv.getName());
-//			ps.setString(3, mv.getPass());
-////			ps.setDate(4, new Date(System.currentTimeMillis()));
-//			ps.executeUpdate();
-//
-//			return getMember(mv.getId());
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
 		PreparedStatement st = null;
 		try {
 			st = con.prepareStatement("insert into member (id,name,pass,regidate) values (?,?,?,?)");
@@ -205,7 +130,7 @@ public class MemberDao {
 	public boolean deleteMember(String id) {
 
 		PreparedStatement ps = null;
-		String query = "delete * from member where id = ?";
+		String query = "delete from member where id = ?";
 
 		try {
 			ps = con.prepareStatement(query);
