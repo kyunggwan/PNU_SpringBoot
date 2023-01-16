@@ -13,22 +13,22 @@ import com.ruby.paper.domain.DataVO;
 public class DataService {
 
 	private DataDao dao;
-	private LogDao log;
+//	private LogDao log;
 	
 	@Autowired
 	public DataService() {
 	dao = new DataDao();
-	log = new LogDao();
+//	log = new LogDao();
 }
 	
 	public List<DataVO> getList(){
 		
 		List<DataVO> list = dao.getList();
-		if(list!=null) {
-			log.addLog("get", dao.getSql(), true);
-		} else {
-			log.addLog("get", dao.getSql(), false);
-		}
+//		if(list!=null) {
+//			log.addLog("get", dao.getSql(), true);
+//		} else {
+//			log.addLog("get", dao.getSql(), false);
+//		}
 		return list;
 	}
 	

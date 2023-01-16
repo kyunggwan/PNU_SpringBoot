@@ -15,7 +15,7 @@ public class LogDao  {
 	public LogDao() {
         try {
         	Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://10.125.121.204/musthave","musthave","tiger");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db1","first","Xptmxm1!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

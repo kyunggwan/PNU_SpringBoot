@@ -22,7 +22,7 @@ public class DataDao {
 	public DataDao() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-		    con = DriverManager.getConnection("jdbc:mysql://10.125.121.204/musthave","musthave","tiger");
+		    con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db1","first","Xptmxm1!");
 		    System.out.println("sql 연결 성공(생성자)");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class DataDao {
 		ResultSet rs = null;
 		
 		try {
-			String sql = "select * from 차량운행정보1";
+			String sql = "select * from car";
 			sqlString = sql;
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
@@ -58,6 +58,7 @@ public class DataDao {
 				m.setRpm_max(rs.getInt("rpm_max"));
 				m.setRpm_av(rs.getInt("rpm_av"));
 				m.setResult(false);
+				list.add(m);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,7 +70,7 @@ public class DataDao {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("getMembers Success");
+		System.out.println("DataDao - getMembers Success");
 		return list;
 	}
 	
