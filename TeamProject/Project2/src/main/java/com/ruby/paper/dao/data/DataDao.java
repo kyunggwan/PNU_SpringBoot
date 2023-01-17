@@ -20,6 +20,7 @@ public class DataDao {
 
 	private String sqlString;
 
+	//생성자를 통해 MySQL DB와 연결
 	public DataDao() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -30,6 +31,7 @@ public class DataDao {
 		}
 	}
 
+	//모든 정보를 출력하는 페이지
 	public List<DataVO> getList() {
 		List<DataVO> list = new ArrayList<>();
 
@@ -75,6 +77,7 @@ public class DataDao {
 		return list;
 	}
 
+	//차량 번호를 인덱스로 정보를 출력하는 페이지
 	public DataVO getSearch(String car_num) {
 		DataVO m = new DataVO();
 		PreparedStatement ps = null;
@@ -120,7 +123,7 @@ public class DataDao {
 		return m;
 	}
 
-
+	//로그에 남길 SQL문을 가져오는 함수
 	public String getSql() {
 		return sqlString;
 	}
