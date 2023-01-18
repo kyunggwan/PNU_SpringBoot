@@ -5,9 +5,9 @@
 - 추가적으로 LogDao로 Log를 남기는 기능도 구현했다.
 
 --- 
-MySQL
-사용자 계정 이름 : first
-비밀번호 : Xptmxm1!
-모든권한 부여
-db명 : db1
-테이블명 : car
+MySQL  
+사용자 계정 이름 : first  
+비밀번호 : Xptmxm1!  
+모든권한 부여  
+db명 : db1  
+테이블명 : car  
