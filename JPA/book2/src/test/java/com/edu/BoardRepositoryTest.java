@@ -43,7 +43,7 @@ public class BoardRepositoryTest {
 //	}
 
 //4. 삭제 기능 테스트
-	@Test
+//	@Test
 	public void testDeleteBoard() {
 		boardRepo.deleteById(1L);
 	}

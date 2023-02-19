@@ -4,10 +4,15 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.edu.domain.Board;
 import com.edu.persistence.BoardRepository;
 
+@SpringBootTest
 public class QueryMethodTest {
 
 	@Autowired
@@ -31,15 +36,15 @@ public class QueryMethodTest {
 //	}
 	
 //	title이 테스트 제목10인 데이터 출력
-	@Test
-	public void testFindByTitle() {
-		List<Board> boardList = boardRepo.findByTitle("테스트 제목10");
-
-		System.out.println("검색 결과");
-		for (Board board : boardList) {
-			System.out.println("===> " + board.toString());
-		}
-	}
+//	@Test
+//	public void testFindByTitle() {
+//		List<Board> boardList = boardRepo.findByTitle("테스트 제목10");
+//
+//		System.out.println("검색 결과");
+//		for (Board board : boardList) {
+//			System.out.println("===> " + board.toString());
+//		}
+//	}
 	
 //	17이 포함된 데이터 출력
 //	@Test
@@ -97,4 +102,18 @@ public class QueryMethodTest {
 //		System.out.println("---->" + board.toString());
 //	}
 //}
+
+//페이징 처리
+//페이지 index 번호, 페이지당 record수, 순서 정렬방법, 
+	@Test
+	public void testFindBytitleContaining() {
+		Pageable paging = PageRequest.of(0, 5, Sort.Direction.DESC, "seq");
+		List<Board> boardList = boardRepo.findByTitleContaining("제목", paging);
+		
+		System.out.println("검색 결과");
+		for(Board board : boardList) {
+			System.out.println("---> " + board.toString());
+		}
+	}
 }
+
