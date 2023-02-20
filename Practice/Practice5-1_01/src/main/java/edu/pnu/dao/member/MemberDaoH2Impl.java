@@ -1,17 +1,12 @@
 package edu.pnu.dao.member;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.crypto.spec.IvParameterSpec;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import edu.pnu.domain.MemberVO;
@@ -19,131 +14,102 @@ import edu.pnu.domain.MemberVO;
 @Repository
 public class MemberDaoH2Impl implements MemberInterface {
 
-	private Connection con = null;
+	private JdbcTemplate jdbcTemplate;
 
-	private String sqlString;
+	@Autowired
+	public MemberDaoH2Impl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-	public MemberDaoH2Impl() {
+	@Override
+	public Map<String, Object> getMembers() {
+		String sqlString = "select * from member order by id asc";
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("sql", sqlString);
 		try {
-			Class.forName("org.h2.Driver");
-			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/mission", "sa", "");
+			List<MemberVO> list = jdbcTemplate.query(sqlString, new BeanPropertyRowMapper<MemberVO>(MemberVO.class));
+			ret.put("data", list);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ret.put("data", null);
 		}
+		return ret;
 	}
 
-	// select * from table
 	@Override
-	public List<MemberVO> getMembers() {
-		// 결과값 저장할 list 선언
-		List<MemberVO> list = new ArrayList<>();
-
-		// sql문 실행하는 객체 생성
-		Statement st = null;
-
-		// sql문 실행 결과 받는 ResultSet생성
-		ResultSet rs = null;
-
+	public Map<String, Object> getMember(Integer id) {
+		Map<String, Object> ret = new HashMap<>();
+		String sqlString = String.format("select * from member where id=%d", id);
+		ret.put("sql", sqlString);
 		try {
-			// con에서 객체 부여
-			String sql = "select * from member";
-			sqlString = sql;
-			st = con.createStatement();
-			rs = st.executeQuery(sql);
-
-			// rs의 다음값이 있으면 list에 rs 추가
-			while (rs.next()) {
-				// list에 넣을 MemberVO 객체 m 선언
-				MemberVO m = new MemberVO();
-				// rs가 가진 값을 m에 넣어주기
-				m.setId(rs.getInt("id"));
-				m.setName(rs.getString("name"));
-				m.setPass(rs.getString("pass"));
-				m.setRegidate(rs.getDate("regidate"));
-				list.add(m);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-				st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			MemberVO member = jdbcTemplate.queryForObject(sqlString,
+					new BeanPropertyRowMapper<MemberVO>(MemberVO.class));
+			ret.put("data", member);
+		} catch (Exception e) {
+			ret.put("data", null);
 		}
-		System.out.println("getMembers Success");
-		return list;
+		return ret;
 	}
 
 	@Override
-	public MemberVO getMember(Integer id) {
-
-	}
-
-	// 최댓값 다음 수를 찾아주는 메소드
-	private int getNextId() {
-		// sql문 실행 객체
-		Statement st = null;
-		// sql문 실행 결과
-		ResultSet rs = null;
-
+	public Map<String, Object> addMember(MemberVO member) {
+		String sqlString = "insert into member (id, pass, name) values (?,?,?)";
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("sql", sqlString);
+		int id;
 		try {
-			// id열 중 최댓값을 구하는 쿼리문
-			String sql = "select max(id) from member";
-			st = con.createStatement();
-			rs = st.executeQuery(sql);
-			// rs : max값 앞을 가리킴
-			// rs.next() : max값을 가리킴
-			rs.next();
-			// rs 내 요소 1개 > rs의 첫번째 요소(max값)를 가져와서 +1
-			return rs.getInt(1) + 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-				st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			id = jdbcTemplate.queryForObject("select max(id) from member", Integer.class) + 1;
+		} catch (Exception e) {
+			ret.put("data", null);
+			return ret;
 		}
-		return 1;
-	}
-
-	@Override
-	public MemberVO addMember(MemberVO vo) {
-
-	}
-
-	@Override
-	public MemberVO updateMember(MemberVO vo) {
-
-	}
-
-	@Override
-	public boolean removeMember(Integer id) {
-
-		PreparedStatement ps = null;
 		try {
-			String sql = "delete from member where id = ?";
-			sqlString = String.format("delete from member where id ='%d'", id);
-			// sql문 실행 객체
-			ps = con.prepareStatement(sql);
-			ps.setInt(1, id);
-			if(ps.executeUpdate() == 1) {
-				System.out.println("deleteMember Success");
-				return true;
+			if (jdbcTemplate.update(sqlString, id, member.getPass(), member.getName()) != 0) {
+				Map<String, Object> map = getMember(id);
+				ret.put("data", map.get("data"));
+			} else {
+				ret.put("data", null);
 			}
 		} catch (Exception e) {
-			
+			ret.put("data", null);
 		}
+		return ret;
 	}
 
 	@Override
-	public String getSql() {
-
-		return sqlString;
+	public Map<String, Object> updateMember(MemberVO member) {
+		String sqlString = String.format("update member set pass='%s', name='%s' where id=%d", member.getPass(),
+				member.getName(), member.getId());
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("sql", sqlString);
+		try {
+			if (jdbcTemplate.update(sqlString) != 0) {
+				Map<String, Object> map = getMember(member.getId());
+				ret.put("data", map.get("data"));
+			} else {
+				ret.put("data", null);
+			}
+		} catch (Exception e) {
+			ret.put("data", null);
+		}
+		return ret;
 	}
 
+	@Override
+	public Map<String, Object> deleteMember(Integer id) {
+		String sqlString = String.format("delete from member where id=%d", id);
+		Map<String, Object> ret = new HashMap<>();
+		ret.put("sql", sqlString);
+
+		try {
+			Map<String, Object> map = getMember(id);
+			if (map.get("data") != null && jdbcTemplate.update(sqlString) != 0) {
+				ret.put("data", map.get("data"));
+			} else {
+				ret.put("data", null);
+			}
+		} catch (Exception e) {
+			ret.put("data", null);
+		}
+		return ret;
+	}
 }

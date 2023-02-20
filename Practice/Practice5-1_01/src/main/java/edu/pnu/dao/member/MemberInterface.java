@@ -1,21 +1,20 @@
 package edu.pnu.dao.member;
 
-import java.util.List;
+import java.util.Map;
 
 import edu.pnu.domain.MemberVO;
 
 public interface MemberInterface {
 
-	List<MemberVO> getMembers();
+	Map<String, Object> getMembers();
 
-	MemberVO getMember(Integer id);
+	Map<String, Object> getMember(Integer id);
 
-	MemberVO addMember(MemberVO vo);
+	Map<String, Object> addMember(MemberVO member);
 
-	MemberVO updateMember(MemberVO vo);
+	Map<String, Object> updateMember(MemberVO member);
 
-	boolean removeMember(Integer id);
+	Map<String, Object> deleteMember(Integer id);
 
-	String getSql();
 
 }

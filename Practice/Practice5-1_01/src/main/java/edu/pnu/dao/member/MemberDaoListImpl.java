@@ -2,15 +2,16 @@ package edu.pnu.dao.member;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.pnu.domain.MemberVO;
 
+//@Repository
 public class MemberDaoListImpl implements MemberInterface {
 
-	List<MemberVO> list;
-
-	private String sqlString;
+	private List<MemberVO> list;
 
 	public MemberDaoListImpl() {
 		super();
@@ -21,62 +22,73 @@ public class MemberDaoListImpl implements MemberInterface {
 	}
 
 	@Override
-	public List<MemberVO> getMembers() {
-		sqlString = "getMembers()";
-		return list;
+	public Map<String, Object> getMembers() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("sql", "from the list getMembers()");
+		map.put("data", list);
+		return map;
 	}
 
 	@Override
-	public MemberVO getMember(Integer id) {
-		sqlString = "getMember()";
+	public Map<String, Object> getMember(Integer id) {
 		for (MemberVO m : list) {
 			if (m.getId() == id) {
-				return m;
+				Map<String, Object> map = new HashMap<>();
+				map.put("sql", "from list getMember()");
+				map.put("data", m);
+				return map;
 			}
 		}
 		return null;
 	}
 
-	@Override
-	public MemberVO addMember(MemberVO vo) {
-		sqlString = "addMember()";
-		vo.setId(list.size());
-		vo.setRegidate(new Date());
-		list.add(vo);
-		System.out.println("addMember Success");
-		return vo;
+	private int getNextId() {
+		return list.size() + 1;
 	}
 
 	@Override
-	public MemberVO updateMember(MemberVO vo) {
-		sqlString = "updateMember()";
+	public Map<String, Object> addMember(MemberVO member) {
+		member.setId(getNextId());
+		member.setRegidate(new Date());
+		list.add(member);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("sql", "from list addMember");
+		map.put("data", member);
+
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> updateMember(MemberVO member) {
 		for (MemberVO m : list) {
-			if (m.getId() == vo.getId()) {
-				m.setName(vo.getName());
-				m.setPass(vo.getPass());
-				System.out.println("updateMember Success");
-				return vo;
+			if (m.getId() == member.getId()) {
+				m.setName(member.getName());
+				m.setPass(member.getPass());
+
+				Map<String, Object> map = new HashMap<>();
+				map.put("sql", "from list updateMember");
+				map.put("data", m);
+
+				return map;
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public boolean removeMember(Integer id) {
-		sqlString = "removeMember()";
+	public Map<String, Object> deleteMember(Integer id) {
 		for (MemberVO m : list) {
 			if (m.getId() == id) {
 				list.remove(m);
-				System.out.println("removeMember Success");
-				return true;
+
+				Map<String, Object> map = new HashMap<>();
+				map.put("sql", "from list deleteMember");
+				map.put("data", m);
+
+				return map;
 			}
 		}
-		return false;
+		return null;
 	}
-
-	@Override
-	public String getSql() {
-		return sqlString;
-	}
-
 }

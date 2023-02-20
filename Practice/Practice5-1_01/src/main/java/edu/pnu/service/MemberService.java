@@ -1,71 +1,65 @@
 package edu.pnu.service;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.pnu.dao.log.LogDao;
+import edu.pnu.dao.member.MemberInterface;
 import edu.pnu.domain.MemberVO;
 
 @Service
 public class MemberService {
 	
-//	@Autowired
-//	private MemberInterface dao;
-//	@Autowired
-//	private Member LogInterface log;
+	private MemberInterface memberDao;
+	private LogDao logDao;
 
+	@Autowired
+	public MemberService(MemberInterface memberDao, LogDao logDao) {
+		this.memberDao = memberDao;
+		this.logDao = logDao;
+	}
 	
-	public List<MemberVO> getMembers(){
-		//자기자신을 받는 객체 생성
-		List<MemberVO> list = dao.getMembers();
-		//실행결과값 있을 때와 없을 때에 따라 success 내용 다르게 로그 남기기
-		if(list!=null) {
-			log.addLog("get", dao.getSql(), true);
-		} else {
-			log.addLog("get", dao.getSql(), false);
-		}
+	@SuppressWarnings("unchecked")
+	public List<MemberVO> getMembers() {
+		Map<String, Object> map = memberDao.getMembers();
+		List<MemberVO> list = (List<MemberVO>) map.get("data");
+		if (list != null)	logDao.addLog("get", (String)map.get("sql"), true);
+		else				logDao.addLog("get", (String)map.get("sql"), false);
 		return list;
 	}
-	
+
 	public MemberVO getMember(Integer id) {
-		MemberVO m = dao.getMember(id);
-		if(m!=null) {
-			log.addLog("get", dao.getSql(), true);
-		} else {
-			log.addLog("get", dao.getSql(), false);
-		}
+		Map<String, Object> map = memberDao.getMember(id);
+		MemberVO member = (MemberVO) map.get("data");
+		if (member != null)	logDao.addLog("get", (String)map.get("sql"), true);
+		else				logDao.addLog("get", (String)map.get("sql"), false);
+		return member;
+	}
+
+	public MemberVO addMember(MemberVO member) {
+		Map<String, Object> map = memberDao.addMember(member);
+		MemberVO m = (MemberVO) map.get("data");
+		if (m != null)	logDao.addLog("post", (String)map.get("sql"), true);
+		else			logDao.addLog("post", (String)map.get("sql"), false);
+		return m;		
+	}
+
+	public MemberVO updateMember(MemberVO member) {
+		Map<String, Object> map = memberDao.updateMember(member);
+		MemberVO m = (MemberVO) map.get("data");
+		if (m != null)	logDao.addLog("put", (String)map.get("sql"), true);
+		else			logDao.addLog("put", (String)map.get("sql"), false);	
 		return m;
 	}
-	
-	public MemberVO addMember(Integer id) {
-		MemberVO m = dao.addMember(vo);
-		if(m!=null) {
-			log.addLog("Post", getSql(), true);
-		} else {
-			log.addLog("Post", getSql(), false);
-		}
-		return m;
-	}
-	
-	public MemberVO updateMember(Integer id) {
-		MemberVO m = dao.updateMember(vo);
-		if(m!=null) {
-			log.addLog("put", dao.getSql(), true);
-		}else {
-			log.addLog("put", dao.getSql(), false);
-		}
-		return m;
-	}
-	
-	public boolean removeMember(Integer id) {
-		boolean m = dao.removeMember(id);
-		if(m == true) {
-			log.addLog("delete", dao.getSql(), true);
-		} else {
-			log.addLog("delete", dao.getSql(), false);
-		}
+
+	public MemberVO deleteMember(Integer id) {
+		Map<String, Object> map = memberDao.deleteMember(id);
+		MemberVO m = (MemberVO) map.get("data");
+		if (m != null)	logDao.addLog("delete", (String)map.get("sql"), true);
+		else			logDao.addLog("delete", (String)map.get("sql"), false);
 		return m;
 	}
 }
